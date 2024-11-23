@@ -4,7 +4,7 @@
 World::World()
 {
 	srand(time(NULL));
-	world.resize(10, std::vector<Cell>(10, Cell(1, "X", nullptr)));
+	world.resize(10, std::vector<Cell>(10, Cell(None, "_", nullptr)));
 }
 
 void World::placePlayers(int playerCount)

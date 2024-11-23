@@ -3,7 +3,7 @@
 
 int main() {
 	World demoWorld;
-	demoWorld.placePlayers(4);
+	demoWorld.placePlayers(10);
 
 	demoWorld.print();
 }

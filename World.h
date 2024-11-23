@@ -6,12 +6,12 @@
 using namespace std;
 
 struct Cell {
-	int resource;
+	ResourceType resource;
 	string display;
 	Player* occupied;
 
-
-	Cell(int r = 0, string d = "", Player* o = nullptr) : resource(r), display(d), occupied(o) {};
+	Cell() : resource(None), display(""), occupied(nullptr) {};
+	Cell(ResourceType r, string d, Player* o) : resource(r), display(d), occupied(o) {};
 };
 
 class World
