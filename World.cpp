@@ -1,31 +1,64 @@
 #include "World.h"
 #include <iostream>
 
-World::World()
+const int SIZE = 15;
+
+World::World() : world(SIZE, vector<Cell>(SIZE, Cell()))
 {
 	srand(time(NULL));
-	world.resize(10, std::vector<Cell>(10, Cell(None, "_", nullptr)));
+	
+
+
+
+	store["katana"] = { {"price", 10}, { "attack", 10 }, {"range", 1}};
+	store["spear"] = { {"price", 10}, {"attack", 7}, {"range", 2} };
+	store["bow"] = { {"price", 10}, {"attack", 5}, {"range", 3} };
+
+	displayStore["katana"] = "Ka";
+	displayStore["spear"] = "Sp";
+	displayStore["bow"] = "Bo";
+
 }
+
+
 
 void World::placePlayers(int playerCount)
 {
 	for (int i = 0; i < playerCount; i++) {
-		int x = rand() % 10, y = rand() % 10;
+		int x = rand() % SIZE, y = rand() % SIZE;
+
 		if (world[x][y].occupied != nullptr) {
 			i--;
 			break;
 		}
-		world[x][y].occupied = new Player(std::to_string(i + 1), x, y);
-		world[x][y].display = world[x][y].occupied->getName();
+
+		world[x][y].occupied = new Player(to_string(i + 1), x, y);
+		world[x][y].display = 'P' + world[x][y].occupied->getName();
 	}
 }
 
 void World::print()
 {
-	for (int i = 0; i < 10; i++) {
-		for (int j = 0; j < 10; j++) {
-			std::cout << world[i][j].display << " ";
-		}
-		std::cout << std::endl;
+	for (int i = 0; i < SIZE * 3 + 1; i++) {
+		cout << "-";
 	}
+	cout << endl;
+
+	for (int i = 0; i < SIZE; i++) {
+		cout << '|';
+		for (int j = 0; j < SIZE; j++) {
+			cout << world[i][j].display << '|';
+		}
+		cout << endl;
+	}
+
+	for (int i = 0; i < SIZE * 3 + 1; i++) {
+		cout << "-";
+	}
+	cout << endl;
+}
+
+void World::generateWorld()
+{
+	
 }

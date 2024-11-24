@@ -1,17 +1,19 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <unordered_map>
 #include "Player.h"
 
 using namespace std;
 
 struct Cell {
-	ResourceType resource;
+	int gold;
+	string storeKey;	// Key for the item in store
 	string display;
 	Player* occupied;
 
-	Cell() : resource(None), display(""), occupied(nullptr) {};
-	Cell(ResourceType r, string d, Player* o) : resource(r), display(d), occupied(o) {};
+	Cell() : gold(0), storeKey(""), display("  "), occupied(nullptr) {};
+	Cell(int g, string sk, string d, Player* o) : gold(g), storeKey(sk), display(d), occupied(o) {};
 };
 
 class World
@@ -21,6 +23,9 @@ public:
 	void placePlayers(int playerCount); // Places given amount of players in the world
 	void print(); // Prints the world for the user
 private:
-	vector<vector<Cell>> world; 
+	void generateWorld();	// Generates items, obstacles and gold in the world
+	vector<vector<Cell>> world;
+	unordered_map<string, unordered_map<string, int > > store;
+	unordered_map<string, string> displayStore;
 };
 

@@ -20,8 +20,7 @@ void Player::attack(Player& opponent)
 	opponent.HP--;
 }
 
-void Player::collect(ResourceType rsc)
+void Player::collect()
 {
-	resources[rsc]++;
 }
 
