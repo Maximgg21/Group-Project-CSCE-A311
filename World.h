@@ -24,8 +24,9 @@ public:
 	void print(); // Prints the world for the user
 private:
 	void generateWorld();	// Generates items, obstacles and gold in the world
+	pair<int, int> randomEmptyTile();	// Gets coordinates x, y of an empty position in the world
 	vector<vector<Cell>> world;
 	unordered_map<string, unordered_map<string, int > > store;
-	unordered_map<string, string> displayStore;
+	unordered_map<string, string> storeDisplay;
 };
 
