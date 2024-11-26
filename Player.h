@@ -1,5 +1,4 @@
 #pragma once
-#include "Resource.h"
 #include <map>
 #include <string>
 using namespace std;
@@ -12,13 +11,12 @@ public:
 	string getName();
 	void move(int new_x, int new_y);
 	void attack(Player& opponent);
-	void collect(ResourceType rsc);
+	void collect();
 
 
 
 private:
 	int x, y, HP;
-	map<ResourceType, int> resources;
 	string name;
 };
 
