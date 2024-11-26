@@ -1,8 +1,8 @@
 #include "Player.h"
 
-Player::Player(string name, int x, int y) : name(name), x(x), y(y) , HP(20) {};
+Player::Player(string name, int x, int y) : name(name), x(x), y(y) , HP(20), ATK(3), MS(1), gold(0) {
 
-Player::Player() : name(""), x(0), y(0), HP(20) {};
+};
 
 string Player::getName()
 {
@@ -18,9 +18,5 @@ void Player::move(int new_x, int new_y)
 void Player::attack(Player& opponent)
 {
 	opponent.HP--;
-}
-
-void Player::collect()
-{
 }
 

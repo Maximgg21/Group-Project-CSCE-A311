@@ -1,7 +1,7 @@
 #include "World.h"
 #include <iostream>
 
-const int SIZE = 15;
+const int SIZE = 15;	// World size
 
 World::World() : turn(0), world(SIZE, vector<Cell>(SIZE, Cell()))
 {
@@ -17,8 +17,6 @@ World::World() : turn(0), world(SIZE, vector<Cell>(SIZE, Cell()))
 
 	regenerateWorld(7, 3);	// First generation of the world
 }
-
-
 
 void World::placePlayers(int playerCount)
 {
@@ -82,8 +80,6 @@ void World::regenerateWorld(int goldAmount, int potionsAmount)
 		world[x][y].display = 'G' + to_string(randomGold);
 	}
 }
-
-
 
 pair<int, int> World::randomEmptyTile()
 {
