@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <unordered_map>
+#include <map>
 #include "Player.h"
 
 using namespace std;
@@ -27,7 +28,7 @@ private:
 	void regenerateWorld(int goldAmount, int potionsAmount);	// Generates items in the world
 	pair<int, int> randomEmptyTile();	// Gets coordinates x, y of an empty position in the world
 	vector<vector<Cell>> world;		// The map
-	unordered_map<string, unordered_map<string, int> > store;		// Items and their stats
+	map<string, map<string, int>> store;		// Items and their stats
 	unordered_map<string, string> storeDisplay;		// Items and their display
 	void initializeStore();
 

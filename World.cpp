@@ -20,6 +20,7 @@ World::World() : turn(0), world(SIZE, vector<Cell>(SIZE, Cell()))
 
 void World::placePlayers(int playerCount)
 {
+	/* Places players on the map */
 	for (int i = 0; i < playerCount; i++) {
 		pair<int, int> result = randomEmptyTile();
 		int x = result.first;
@@ -54,6 +55,7 @@ void World::print()
 
 void World::regenerateWorld(int goldAmount, int potionsAmount)
 {
+	/* Generates new items on the map */
 	int storeSize = storeDisplay.size();
 
 	for (int i = 0; i < potionsAmount; i++) {		// Generate potions from the store
@@ -83,6 +85,7 @@ void World::regenerateWorld(int goldAmount, int potionsAmount)
 
 pair<int, int> World::randomEmptyTile()
 {
+	/* Gets a random empty tile on the map */
 	while (true) {
 		int x = rand() % SIZE, y = rand() % SIZE;
 
@@ -95,6 +98,8 @@ pair<int, int> World::randomEmptyTile()
 
 void World::initializeStore()
 {
+	/* Initializes the items in the store */
+
 	store["power potion 1"] = { {"price", 5}, { "attack", 1 } };
 	store["power potion 2"] = { {"price", 7}, { "attack", 2 } };
 	store["power potion 3"] = { {"price", 10}, { "attack", 3 } };
