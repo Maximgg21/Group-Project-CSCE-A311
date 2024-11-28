@@ -22,7 +22,7 @@ void Player::move(int new_x, int new_y)
 
 void Player::attack(Player& opponent)
 {
-	opponent.HP--;
+	opponent.HP -= ATK;
 }
 
 void Player::upgrade(map<string, map<string, int>> store)

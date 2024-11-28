@@ -53,6 +53,10 @@ void World::print()
 	cout << endl;
 }
 
+void World::play()
+{
+}
+
 void World::regenerateWorld(int goldAmount, int potionsAmount)
 {
 	/* Generates new items on the map */

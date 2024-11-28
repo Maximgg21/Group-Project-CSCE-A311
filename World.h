@@ -22,7 +22,8 @@ class World
 public:
 	World();
 	void placePlayers(int playerCount); // Places given amount of players in the world
-	void print(); // Prints the world for the user
+	void print(); // Prints the world for the user (This should be a private function later used inside play() )
+	void play();	// Plays the game
 private:
 	int turn;
 	void regenerateWorld(int goldAmount, int potionsAmount);	// Generates items in the world
