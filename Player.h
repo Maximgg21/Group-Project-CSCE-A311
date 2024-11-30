@@ -7,13 +7,20 @@ using namespace std;
 
 class Player
 {
-public:
+public: 
 	Player();
 	Player(string n, int x, int y);
 	string getName();
+	int getGold();
+	void setGold(int g);
+	int getMS();
+	void setMS(int m);
+	int getATK();
+	void setATK(int a);
+	int getHP();
+	void setHP(int h);
 	void move(int new_x, int new_y);
 	void attack(Player& opponent);
-	void upgrade(map<string, map<string, int>> store);
 private:
 	int x, y, HP, ATK, MS, gold;
 	string name;
