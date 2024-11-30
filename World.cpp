@@ -26,7 +26,10 @@ void World::placePlayers(int playerCount)
 		int x = result.first;
 		int y = result.second;
 
-		world[x][y].occupied = new Player(to_string(i + 1), x, y);
+		Player* p = new Player(to_string(i + 1), x, y);
+		playerTurns.push(p);
+
+		world[x][y].occupied = p;
 		world[x][y].display = 'P' + world[x][y].occupied->getName();
 	}
 }
@@ -55,6 +58,45 @@ void World::print()
 
 void World::play()
 {
+	/*
+		Print World at Start of Every Turn
+	*/
+	print();
+
+
+	while (!playerTurns.empty())
+	{
+		Player* currPlayer = playerTurns.front();
+		playerTurns.pop();
+
+		int choice;
+
+		do
+		{
+			cout << "(1) Attack"	<< endl;
+			cout << "(2) Move"		<< endl;
+			cout << "(3) Shop"		<< endl;
+			cout << "----------"	<< endl;
+			cin >> choice;
+
+			if (choice < 1 || choice > 3) cout << "Invalid option--try again" << endl;
+		} while (choice < 1 || choice > 3);
+
+		if (choice == 1)
+		{
+			continue;
+		}
+		else if (choice == 2)
+		{
+			continue;
+		}
+		else if (choice == 3)
+		{
+			system("cls");
+			// print shop
+		}
+
+	}
 }
 
 void World::regenerateWorld(int goldAmount, int potionsAmount)

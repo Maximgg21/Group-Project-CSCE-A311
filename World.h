@@ -3,7 +3,9 @@
 #include <string>
 #include <unordered_map>
 #include <map>
+#include <queue>
 #include "Player.h"
+#include "stdlib.h"
 
 using namespace std;
 
@@ -31,6 +33,7 @@ private:
 	vector<vector<Cell>> world;		// The map
 	map<string, map<string, int>> store;		// Items and their stats
 	unordered_map<string, string> storeDisplay;		// Items and their display
+	queue<Player*> playerTurns;
 	void initializeStore();
 
 };
