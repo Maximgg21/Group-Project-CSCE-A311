@@ -9,13 +9,13 @@ World::World() : turn(0), world(SIZE, vector<Cell>(SIZE, Cell()))
 
 	cout << "P - player" << endl;
 	cout << "G - gold" << endl;
-	cout << "H - health potion" << endl;
-	cout << "S - speed potion" << endl;
-	cout << "P - power potion" << endl;
+	cout << "HP - health potion" << endl;
+	cout << "SP - speed potion" << endl;
+	cout << "PP - power potion" << endl;
 
-	initializeStore();		// Initialization of the items in the store
+	worldStore = new Store;
 
-	regenerateWorld(7, 3);	// First generation of the world
+	regenerateWorld(7, 3, worldStore);	// First generation of the world
 }
 
 void World::placePlayers(int playerCount)
@@ -57,22 +57,30 @@ void World::play()
 {
 }
 
-void World::regenerateWorld(int goldAmount, int potionsAmount)
+void World::regenerateWorld(int goldAmount, int potionsAmount, Store* s)
 {
 	/* Generates new items on the map */
-	int storeSize = storeDisplay.size();
-
 	for (int i = 0; i < potionsAmount; i++) {		// Generate potions from the store
 		pair<int, int> result = randomEmptyTile();
+		vector<string> spawnPotions = { "Small Power Potion", "Small Health Potion", "Small Speed Potion" };
 		int x = result.first;
 		int y = result.second;
 
-		int randIndex = rand() % storeSize;		// Select a random item from the store
-		auto it = storeDisplay.begin();
-		advance(it, randIndex);
-
-		world[x][y].storeKey = it->first;
-		world[x][y].display = it->second;
+		int randIndex = rand() % spawnPotions.size();		// Select a random item from the store
+		world[x][y].cellItem = s->findItem(spawnPotions[randIndex]);
+		switch (randIndex) {
+		case 0:
+			world[x][y].display = "PP";
+			break;
+		case 1:
+			world[x][y].display = "HP";
+			break;
+		case 2:
+			world[x][y].display = "SP";
+			break;
+		default:
+			break;
+		}
 	}
 
 	for (int i = 0; i < goldAmount; i++) {				// Generate gold
@@ -98,33 +106,4 @@ pair<int, int> World::randomEmptyTile()
 			return { x, y };
 		}
 	}
-}
-
-void World::initializeStore()
-{
-	/* Initializes the items in the store */
-
-	store["power potion 1"] = { {"price", 5}, { "attack", 1 } };
-	store["power potion 2"] = { {"price", 7}, { "attack", 2 } };
-	store["power potion 3"] = { {"price", 10}, { "attack", 3 } };
-
-	store["speed potion 1"] = { {"price", 5}, { "speed", 1 } };
-	store["speed potion 2"] = { {"price", 7}, { "speed", 2 } };
-	store["speed potion 3"] = { {"price", 10}, { "speed", 3 } };
-
-	store["health potion 1"] = { {"price", 5}, { "health", 3 } };
-	store["health potion 2"] = { {"price", 7}, { "health", 6 } };
-	store["health potion 3"] = { {"price", 10}, { "health", 10 } };
-
-	storeDisplay["power potion 1"] = "P1";
-	storeDisplay["power potion 2"] = "P2";
-	storeDisplay["power potion 3"] = "P3";
-
-	storeDisplay["speed potion 1"] = "S1";
-	storeDisplay["speed potion 2"] = "S2";
-	storeDisplay["speed potion 3"] = "S3";
-
-	storeDisplay["health potion 1"] = "H1";
-	storeDisplay["health potion 2"] = "H2";
-	storeDisplay["health potion 3"] = "H3";
 }

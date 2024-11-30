@@ -1,5 +1,6 @@
 #include <iostream>
 #include "World.h"
+#include "Store.h"
 
 using namespace std;
 
@@ -17,13 +18,10 @@ int main() {
 
 	/* Tests */
 	demoWorld.print();
-
-	map<string, map<string, int>> store;		// Items and their stats
-
-	store["power potion 1"] = { {"price", 5}, { "attack", 1 } };
-	store["power potion 2"] = { {"price", 7}, { "attack", 2 } };
-	store["power potion 3"] = { {"price", 10}, { "attack", 3 } };
-
+	Store playerStore;
 	Player player;
-	player.upgrade(store);
+
+	cout << "HP = " << player.getHP() << ", ATK = " << player.getATK() << ", MS = " << player.getMS() << endl;
+	playerStore.accessStore(player);
+	return 0;
 }
