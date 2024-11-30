@@ -35,9 +35,9 @@ Store::Store()
 	}
 }
 
-void Store::accessStore(Player& user) // Opens the store and lists the items that a player can buy to upgrade their stats
+void Store::accessStore(Player* user) // Opens the store and lists the items that a player can buy to upgrade their stats
 {
-	std::cout << "You have " << user.getGold() << " Gold" << std::endl;
+	std::cout << "You have " << user->getGold() << " Gold" << std::endl;
 	std::cout << "What would you like to buy?" << std::endl << "(Type the item name or 'exit' to leave)" << std::endl << std::endl;
 
 	shared_ptr<Item> temp = head;
@@ -64,7 +64,7 @@ void Store::accessStore(Player& user) // Opens the store and lists the items tha
 		std::cout << "There is no such item in the store." << std::endl;
 		return;
 	}
-	else if (user.getGold() < temp->price) {
+	else if (user->getGold() < temp->price) {
 		std::cout << "You don't have enough gold to buy this item." << std::endl;
 		return;
 	}
@@ -74,7 +74,7 @@ void Store::accessStore(Player& user) // Opens the store and lists the items tha
 
 	purchaseItem(temp, user);
 
-	std::cout << "You bought the item. Your stats now are: " << "HP = " << user.getHP() << ", ATK = " << user.getATK() << ", MS = " << user.getMS() << std::endl;
+	std::cout << "You bought the item. Your stats now are: " << "HP = " << user->getHP() << ", ATK = " << user->getATK() << ", MS = " << user->getMS() << std::endl;
 }
 
 shared_ptr<Item> Store::findItem(std::string n) // Returns pointer to desired item for easy access.
@@ -99,22 +99,22 @@ shared_ptr<Item> Store::findItem(std::string n) // Returns pointer to desired it
 	return i;
 }
 
-void Store::purchaseItem(shared_ptr<Item> i, Player& u) // Applies buff, removes gold, and if neccesary, deletes item from store.
+void Store::purchaseItem(shared_ptr<Item> i, Player* u) // Applies buff, removes gold, and if neccesary, deletes item from store.
 {
 	bool toDelete = false; // If the purchased item can only be purchased once, this becomes true.
 	switch (i->type) {
 	case 1:
-		u.setATK(u.getATK() + i->buff);
-		u.setGold(u.getGold() - i->price);
+		u->setATK(u->getATK() + i->buff);
+		u->setGold(u->getGold() - i->price);
 		toDelete = true; // I made items that improve ATK and MS one time purchases so a character can't be insanely stacked, feel free to change this :)
 		break;
 	case 2:
-		u.setHP(u.getHP() + i->buff);
-		u.setGold(u.getGold() - i->price);
+		u->setHP(u->getHP() + i->buff);
+		u->setGold(u->getGold() - i->price);
 		break;
 	case 3:
-		u.setMS(u.getMS() + i->buff);
-		u.setGold(u.getGold() - i->price);
+		u->setMS(u->getMS() + i->buff);
+		u->setGold(u->getGold() - i->price);
 		toDelete = true;
 		break;
 	default:

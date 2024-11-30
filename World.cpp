@@ -66,35 +66,52 @@ void World::play()
 
 	while (!playerTurns.empty())
 	{
+		// Print world again
+		//print();
+
+		// Grab first player
 		Player* currPlayer = playerTurns.front();
 		playerTurns.pop();
 
+		int choiceCount = 2;
 		int choice;
 
-		do
+		for (int i = 0; i < 2; i++)
 		{
-			cout << "(1) Attack"	<< endl;
-			cout << "(2) Move"		<< endl;
-			cout << "(3) Shop"		<< endl;
-			cout << "----------"	<< endl;
-			cin >> choice;
+			do
+			{
+				// Prompt for player activity
+				cout << "(1) Attack" << endl;
+				cout << "(2) Move" << endl;
+				cout << "(3) Shop" << endl;
+				cout << "----------" << endl;
+				cin >> choice;
 
-			if (choice < 1 || choice > 3) cout << "Invalid option--try again" << endl;
-		} while (choice < 1 || choice > 3);
+				// Ensure valid input
+				if (choice < 1 || choice > 3) cout << "Invalid option--try again" << endl;
+			} while (choice < 1 || choice > 3);
 
-		if (choice == 1)
-		{
-			continue;
+			if (choice == 1)
+			{
+				attack_range(currPlayer);
+			}
+			else if (choice == 2)
+			{
+				continue;
+			}
+			else if (choice == 3)
+			{
+				// Store Access
+				worldStore->accessStore(currPlayer);
+			}
 		}
-		else if (choice == 2)
-		{
-			continue;
-		}
-		else if (choice == 3)
-		{
-			system("cls");
-			// print shop
-		}
+
+
+		// Add player to back
+		playerTurns.push(currPlayer);
+
+		// Clear screen after every turn
+		system("cls");
 
 	}
 }
@@ -146,6 +163,76 @@ pair<int, int> World::randomEmptyTile()
 		if (world[x][y].display == "  ")
 		{
 			return { x, y };
+		}
+	}
+}
+
+void World::attack_range(Player* p)
+{
+	vector<Player*> players;
+
+	// Save player position
+	int pX = p->getX();
+	int pY = p->getY();
+
+	// Iterate 1 block around player
+	for (int xPos = pX - 1; xPos < pX + 1; xPos++)
+	{
+		for (int yPos = pY - 1; yPos < pY + 1; yPos++)
+		{
+			// ignore ourselves
+			if (xPos == pX && yPos == pY) {} // do nothing
+			else if (xPos < SIZE && xPos >= 0 && yPos < SIZE && yPos >= 0 && world[xPos][yPos].occupied != nullptr)
+			{
+				// Store enemy player
+				players.push_back(world[xPos][yPos].occupied);
+			}
+		}
+	}
+
+	// Return early
+	if (players.empty())
+	{
+		cout << "You can't attack anyone" << endl;
+		return;
+	}
+
+
+	// Print enemy players
+	cout << "You can attack:";
+	for (auto e : players)
+	{
+		cout << " " << e->getName();
+	}
+	cout << endl;
+
+	// Decide who to attack
+	string to_attack;
+
+	do
+	{
+		cin >> to_attack;
+
+		auto i = find_if(players.begin(), players.end(), [&](Player* e)
+		{
+			return e->getName() == to_attack;
+		});
+
+		if (i == players.end())
+		{
+			cout << "Can't attack that player. Reselect." << endl;
+		}
+		else
+		{
+			break;
+		}
+	} while (true);
+
+	for (auto e : players)
+	{
+		if (e->getName() == to_attack)
+		{
+			p->attack(e);
 		}
 	}
 }

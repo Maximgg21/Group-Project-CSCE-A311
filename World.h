@@ -33,5 +33,9 @@ private:
 	void regenerateWorld(int goldAmount, int potionsAmount, Store* s);	// Generates items in the world
 	pair<int, int> randomEmptyTile();	// Gets coordinates x, y of an empty position in the world
 	vector<vector<Cell>> world;		// The map
+
+	queue<Player*> playerTurns;		// Store players to determine turns
+
+	void attack_range(Player* p);				// Determines who the player can attack
 };
 

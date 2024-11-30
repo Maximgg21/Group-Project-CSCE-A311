@@ -15,13 +15,15 @@ int main() {
 	demoWorld.play();
 
 
+	/* Test
 
-	/* Tests */
 	demoWorld.print();
 	Store playerStore;
+
 	Player player;
 
 	cout << "HP = " << player.getHP() << ", ATK = " << player.getATK() << ", MS = " << player.getMS() << endl;
 	playerStore.accessStore(player);
+	*/
 	return 0;
 }

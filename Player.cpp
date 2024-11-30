@@ -60,8 +60,9 @@ void Player::move(int new_x, int new_y)
 	this->y = new_y;
 }
 
-void Player::attack(Player& opponent)
+void Player::attack(Player* opponent)
 {
-	opponent.HP -= ATK;
+	opponent->HP -= ATK;
 }
+
 

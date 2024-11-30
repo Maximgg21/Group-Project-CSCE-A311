@@ -19,9 +19,9 @@ class Store
 private:
 	shared_ptr<Item> head;
 	shared_ptr<Item> tail;
-	void purchaseItem(shared_ptr<Item> i, Player& u); // Used by accessStore. Applies buff, removes gold, and if neccesary, deletes item from store.
+	void purchaseItem(shared_ptr<Item> i, Player* u); // Used by accessStore. Applies buff, removes gold, and if neccesary, deletes item from store.
 public:
 	Store(); // Constructs the linked list using a vector holding Item objects.
-	void accessStore(Player& user); // Opens the store menu.
+	void accessStore(Player* user); // Opens the store menu.
 	shared_ptr<Item> findItem(std::string n); // Used by accessStore and World.cpp - Returns pointer to desired item to have easily accessable.
 };

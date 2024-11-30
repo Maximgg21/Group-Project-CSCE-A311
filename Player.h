@@ -20,7 +20,9 @@ public:
 	int getHP();
 	void setHP(int h);
 	void move(int new_x, int new_y);
-	void attack(Player& opponent);
+	void attack(Player* opponent);
+	int getX() { return x; }
+	int getY() { return y; }
 private:
 	int x, y, HP, ATK, MS, gold;
 	string name;
