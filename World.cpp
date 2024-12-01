@@ -63,15 +63,20 @@ void World::play()
 	*/
 	print();
 
-
 	while (!playerTurns.empty())
 	{
-		// Print world again
-		print();
-
 		// Grab first player
 		Player* currPlayer = playerTurns.front();
 		playerTurns.pop();
+
+		// If player dead skip loop (this eliminates them from being added again)
+		if (currPlayer->getHP() <= 0)
+		{
+			continue;
+		}
+
+		// Print world again
+		print();
 
 		// Announce turn
 		cout << "It's " << currPlayer->getName() << "'s turn!" << endl;
@@ -84,6 +89,7 @@ void World::play()
 			do
 			{
 				// Prompt for player activity
+				cout << "You have " << 2-i << " actions left." << endl;
 				cout << "(1) Attack" << endl;
 				cout << "(2) Move" << endl;
 				cout << "(3) Shop" << endl;
@@ -96,7 +102,10 @@ void World::play()
 
 			if (choice == 1)
 			{
-				attack_range(currPlayer);
+				if (!attack_range(currPlayer))
+				{
+					i--;
+				}
 			}
 			else if (choice == 2)
 			{
@@ -170,7 +179,7 @@ pair<int, int> World::randomEmptyTile()
 	}
 }
 
-void World::attack_range(Player* p)
+bool World::attack_range(Player* p)
 {
 	vector<Player*> players;
 
@@ -197,7 +206,7 @@ void World::attack_range(Player* p)
 	if (players.empty())
 	{
 		cout << "You can't attack anyone" << endl;
-		return;
+		return false;
 	}
 
 
@@ -231,13 +240,30 @@ void World::attack_range(Player* p)
 		}
 	} while (true);
 
+	// Find the player to attack
 	for (auto e : players)
 	{
+		// If match
 		if (e->getName() == to_attack)
 		{
+			// Attack player
 			p->attack(e);
+
+			// If player dies from attack, remove from play
+			if (e->getHP() <= 0)
+			{
+				int xE = e->getX();
+				int yE = e->getY();
+
+				// Logical 
+				world[xE][yE].occupied = nullptr;
+				// Visual
+				world[xE][yE].display = "  ";
+			}
 		}
 	}
+
+	return true;
 }
 
 void World::move_range(Player* p)
@@ -327,7 +353,4 @@ void World::item_collection(Player* p)
 
 	// Remove item from cell
 	world[xP][yP].cellItem = nullptr;
-
-	// Visual aspect
-	world[xP][yP].display = "  ";
 }
