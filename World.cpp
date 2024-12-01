@@ -15,8 +15,8 @@ World::World() : world(SIZE, vector<Cell>(SIZE, Cell()))
 	regenerateWorld(7, 3, worldStore);	// First generation of the world
 
 	// Print Legend
-	cout << "P - player" << endl;
-	cout << "G - gold" << endl;
+	cout << "\x1b[31m" << "P - player" << "\x1b[0m" << endl;
+	cout << "\x1b[33m" << "G - gold" << "\x1b[0m" << endl;
 	cout << "HP - health potion" << endl;
 	cout << "SP - speed potion" << endl;
 	cout << "PP - power potion" << endl;
@@ -52,7 +52,7 @@ void World::placePlayers()
 		playerTurns.push(p);
 
 		world[x][y].occupied = p;
-		world[x][y].display = "P" + world[x][y].occupied->getName();
+		world[x][y].display = "\x1b[31mP" + world[x][y].occupied->getName() + "\x1b[0m";
 	}
 }
 
@@ -113,11 +113,11 @@ void World::play()
 
 					// Prompt for player activity
 					cout << "You have " << choiceCount - i << " actions left." << endl;
-					cout << "(1) Attack" << endl;
-					cout << "(2) Move" << endl;
-					cout << "(3) Shop" << endl;
-					cout << "(4) View Stats" << endl;
-					cout << "(5) Skip" << endl;
+					cout << "\x1b[31m" << "(1) Attack" << "\x1b[0m" << endl;
+					cout << "\x1b[32m" << "(2) Move" << "\x1b[0m" << endl;
+					cout << "\x1b[33m" << "(3) Shop" << "\x1b[0m" << endl;
+					cout << "\x1b[94m" << "(4) View Stats" << "\x1b[0m" << endl;
+					cout << "\x1b[1;37m" << "(5) Skip" << "\x1b[0m" << endl;
 					cout << "----------" << endl;
 
 					while (!(cin >> choice)) {	// Checking for non-integer inputs
@@ -210,7 +210,7 @@ void World::regenerateWorld(int goldAmount, int potionsAmount, Store* s)
 		int randomGold = rand() % 9 + 1;
 
 		world[x][y].gold = randomGold;
-		world[x][y].display = 'G' + to_string(randomGold);
+		world[x][y].display = "\x1b[33mG" + to_string(randomGold) + "\x1b[0m";
 	}
 }
 
