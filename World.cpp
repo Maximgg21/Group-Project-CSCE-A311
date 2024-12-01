@@ -3,41 +3,61 @@
 
 const int SIZE = 15;	// World size
 
-World::World() : turn(0), world(SIZE, vector<Cell>(SIZE, Cell()))
+World::World() : world(SIZE, vector<Cell>(SIZE, Cell()))
 {
-	srand(time(NULL));
-
 	worldStore = new Store;
 
+	placePlayers();
+
+	cout << "Would you like to play with bots? (1) Yes / (0) No" << endl;
+	cin >> playWithBots;
+
 	regenerateWorld(7, 3, worldStore);	// First generation of the world
-}
 
-void World::placePlayers(int playerCount)
-{
-	/* Places players on the map */
-	for (int i = 0; i < playerCount; i++) {
-		pair<int, int> result = randomEmptyTile();
-		int x = result.first;
-		int y = result.second;
-
-		Player* p = new Player(to_string(i + 1), x, y);
-		if (i == 0) p->setCpu(false); // Makes it so only the first player is not a cpu.
-		playerTurns.push(p);
-
-		world[x][y].occupied = p;
-		world[x][y].display = 'P' + world[x][y].occupied->getName();
-	}
-}
-
-void World::print()
-{
 	// Print Legend
 	cout << "P - player" << endl;
 	cout << "G - gold" << endl;
 	cout << "HP - health potion" << endl;
 	cout << "SP - speed potion" << endl;
 	cout << "PP - power potion" << endl;
+}
 
+World::~World()
+{
+	delete worldStore;
+}
+
+void World::placePlayers()
+{
+	/* Places players on the map */
+	int playerCount;
+	cout << "How many players would you like? (Max 9)" << endl;
+	for (int i = 0; i < 1; i++) {
+		cin >> playerCount;
+		if (playerCount > 9 || playerCount < 2) {
+			cout << "Invalid number of players. Try again! (Max 9)" << endl;
+			i--;
+		}
+	}
+
+	for (int i = 0; i < playerCount; i++) {
+		pair<int, int> result = randomEmptyTile();
+		int x = result.first;
+		int y = result.second;
+
+		Player* p = new Player(to_string(i + 1), x, y);
+		
+		if (i == 0 || !playWithBots) p->setCpu(false); // Makes it so only the first player is not a cpu.
+
+		playerTurns.push(p);
+
+		world[x][y].occupied = p;
+		world[x][y].display = "P" + world[x][y].occupied->getName();
+	}
+}
+
+void World::print()
+{
 	// Print the map
 	for (int i = 0; i < SIZE * 3 + 1; i++) {
 		cout << "-";
@@ -65,18 +85,17 @@ void World::play()
 		// Grab first player
 		Player* currPlayer = playerTurns.front();
 		playerTurns.pop();
+		bool hasAttacked = false;
 
 		// If player dead skip loop (this eliminates them from being added again)
 		if (currPlayer->getHP() <= 0)
 		{
+			int px = currPlayer->getX();
+			int py = currPlayer->getY();
+			world[py][px].occupied = nullptr;
+			delete currPlayer;
 			continue;
 		}
-
-		// Print world again
-		print();
-
-		// Announce turn
-		cout << "It's " << currPlayer->getName() << "'s turn!" << endl;
 
 		if (currPlayer->getCpu()) computer_turn(currPlayer);
 		else {
@@ -86,6 +105,12 @@ void World::play()
 			{
 				do
 				{
+					// Print world again
+					print();
+
+					// Announce turn
+					cout << "It's " << currPlayer->getName() << "'s turn!" << endl;
+
 					// Prompt for player activity
 					cout << "You have " << choiceCount - i << " actions left." << endl;
 					cout << "(1) Attack" << endl;
@@ -94,7 +119,12 @@ void World::play()
 					cout << "(4) View Stats" << endl;
 					cout << "(5) Skip" << endl;
 					cout << "----------" << endl;
-					cin >> choice;
+
+					while (!(cin >> choice)) {	// Checking for non-integer inputs
+						cin.clear(); // Clear error state
+						cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Discard invalid input
+						cout << "Invalid input. Try again: " << endl;
+					}
 
 					// Ensure valid input
 					if (choice < 1 || choice > 5) cout << "Invalid option--try again" << endl;
@@ -102,22 +132,26 @@ void World::play()
 
 				if (choice == 1)
 				{
-					if (!attack_range(currPlayer))
+					if (hasAttacked) {
+						cout << "You can only attack once per turn" << endl;
+						i--;
+					}
+					else if (!attack_range(currPlayer))
 					{
 						i--;
+					}
+					else {
+						hasAttacked = true;
 					}
 				}
 				else if (choice == 2)
 				{
-					move_range(currPlayer);
+					if (!move_range(currPlayer)) i--;
 				}
 				else if (choice == 3)
 				{
 					// Store Access
-					if (!worldStore->accessStore(currPlayer))
-					{
-						i--;
-					}
+					if (!worldStore->accessStore(currPlayer)) i--;
 				}
 				else if (choice == 4)
 				{
@@ -128,13 +162,13 @@ void World::play()
 				{
 					break;
 				}	
-			}
-
-			// Add player to back
-			playerTurns.push(currPlayer);
+			}			
 		}
+		// Add player to back
+		playerTurns.push(currPlayer);
+
 		// Clear screen after every turn
-		system("cls");
+		cout << string(10, '\n');
 
 	}
 
@@ -183,14 +217,19 @@ void World::regenerateWorld(int goldAmount, int potionsAmount, Store* s)
 pair<int, int> World::randomEmptyTile()
 {
 	/* Gets a random empty tile on the map */
-	while (true) {
+	int maxNumberOfRetries = world.size();
+	for (int i = 0; i < maxNumberOfRetries; i++) {
 		int x = rand() % SIZE, y = rand() % SIZE;
+		if (world[x][y].display == "  ") return { x, y };
+	}
 
-		if (world[x][y].display == "  ")
-		{
-			return { x, y };
+	for (int i = 0; i < SIZE; i++) {	// If random tile wasn't found, find any empty tile
+		for (int j = 0; j < SIZE; j++) {
+			if (world[i][j].display == " ") return { i, j };
 		}
 	}
+
+	throw runtime_error("No empty tiles found");	// If the map is full (no solution for this now)
 }
 
 void World::computer_turn(Player* p)
@@ -276,10 +315,10 @@ void World::computer_turn(Player* p)
 			if (!players.empty()) p->attack(players[0]);
 			else {
 				vector<pair<int, int>> validMoves;
-				if (pX + 1 < 15) validMoves.push_back({ pX + 1, pY });
-				if (pX - 1 < 15) validMoves.push_back({ pX - 1, pY });
-				if (pY + 1 < 15) validMoves.push_back({ pX, pY + 1 });
-				if (pY - 1 < 15) validMoves.push_back({ pX, pY - 1 });
+				if (pX + 1 < SIZE) validMoves.push_back({ pX + 1, pY });
+				if (pX - 1 < SIZE) validMoves.push_back({ pX - 1, pY });
+				if (pY + 1 < SIZE) validMoves.push_back({ pX, pY + 1 });
+				if (pY - 1 < SIZE) validMoves.push_back({ pX, pY - 1 });
 
 				int t = rand() % validMoves.size();
 				int newX = validMoves[t].first;
@@ -353,6 +392,7 @@ bool World::attack_range(Player* p)
 		cout << " " << e->getName();
 	}
 	cout << endl;
+	cout << "type the number who to attack" << endl;
 
 	// Decide who to attack
 	string to_attack;
@@ -388,6 +428,8 @@ bool World::attack_range(Player* p)
 			// If player dies from attack, remove from play
 			if (e->getHP() <= 0)
 			{
+				cout << "You killed Player " << e->getName() << endl;
+
 				int xE = e->getX();
 				int yE = e->getY();
 
@@ -402,18 +444,20 @@ bool World::attack_range(Player* p)
 	return true;
 }
 
-void World::move_range(Player* p)
+bool World::move_range(Player* p)
 {
 	int choice;
 
-	int xCombs[] = { 1,0,-1,0 };
-	int yCombs[] = { 0,-1,0,1 };
+	int yCombs[] = { 1,0,-1,0 };
+	int xCombs[] = { 0,-1,0,1 };
 
 
-	cout << "1-Right, 2-Up, 3-Left, 4-Down" << endl;
+	cout << "1-Right, 2-Up, 3-Left, 4-Down, 5-Exit" << endl;
 	do
 	{
 		cin >> choice;
+
+		if (choice == 5) return false;	// Exit
 
 		// Ensure values are correct
 		if (choice < 1 || choice > 4)
@@ -453,7 +497,7 @@ void World::move_range(Player* p)
 				}
 
 				// close out of loop
-				break;
+				return true;
 			}
 			else
 			{
@@ -469,6 +513,8 @@ void World::item_collection(Player* p)
 {
 	int xP = p->getX();
 	int yP = p->getY();
+
+	if (world[xP][yP].cellItem == nullptr) return;
 
 	int tp = world[xP][yP].cellItem->type;
 	int bf = world[xP][yP].cellItem->buff;
