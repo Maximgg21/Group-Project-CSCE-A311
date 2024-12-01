@@ -160,13 +160,13 @@ void World::play()
 				}
 				else if (choice == 5)
 				{
-					break;
+					std::cout << "Turn Skipped." << std::endl;
 				}	
-			}			
+			}
 		}
 		// Add player to back
 		playerTurns.push(currPlayer);
-
+    
 		// Clear screen after every turn
 		cout << string(10, '\n');
 
