@@ -35,7 +35,7 @@ Store::Store()
 	}
 }
 
-void Store::accessStore(Player* user) // Opens the store and lists the items that a player can buy to upgrade their stats
+bool Store::accessStore(Player* user) // Opens the store and lists the items that a player can buy to upgrade their stats
 {
 	std::cout << "You have " << user->getGold() << " Gold" << std::endl;
 	std::cout << "What would you like to buy?" << std::endl << "(Type the item name or 'exit' to leave)" << std::endl << std::endl;
@@ -43,7 +43,7 @@ void Store::accessStore(Player* user) // Opens the store and lists the items tha
 	shared_ptr<Item> temp = head;
 	if (temp == nullptr) {
 		std::cout << "You've purchased the entire store!" << std::endl << std::endl; // This was used for demo purposes, I assume some items will never be "out of stock" so this will never be used.
-		return;
+		return true;
 	}
 
 	while (temp != nullptr) {		// List the items in the store
@@ -55,18 +55,18 @@ void Store::accessStore(Player* user) // Opens the store and lists the items tha
 	getline(cin, order);		// Get the user's desired item.
 	if (order == "exit") {
 		cout << "You left the store." << endl;
-		return;
+		return false;
 	}
 
 	temp = findItem(order);
 
 	if (temp == nullptr) {
 		std::cout << "There is no such item in the store." << std::endl;
-		return;
+		return false;
 	}
 	else if (user->getGold() < temp->price) {
 		std::cout << "You don't have enough gold to buy this item." << std::endl;
-		return;
+		return false;
 	}
 	else {
 
@@ -75,6 +75,8 @@ void Store::accessStore(Player* user) // Opens the store and lists the items tha
 	purchaseItem(temp, user);
 
 	std::cout << "You bought the item. Your stats now are: " << "HP = " << user->getHP() << ", ATK = " << user->getATK() << ", MS = " << user->getMS() << std::endl;
+
+	return true;
 }
 
 shared_ptr<Item> Store::findItem(std::string n) // Returns pointer to desired item for easy access.

@@ -23,6 +23,7 @@ public:
 	void attack(Player* opponent);
 	int getX() { return x; }
 	int getY() { return y; }
+	void view_stats();
 private:
 	int x, y, HP, ATK, MS, gold;
 	string name;

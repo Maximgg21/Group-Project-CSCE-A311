@@ -7,12 +7,6 @@ World::World() : turn(0), world(SIZE, vector<Cell>(SIZE, Cell()))
 {
 	srand(time(NULL));
 
-	cout << "P - player" << endl;
-	cout << "G - gold" << endl;
-	cout << "HP - health potion" << endl;
-	cout << "SP - speed potion" << endl;
-	cout << "PP - power potion" << endl;
-
 	worldStore = new Store;
 
 	regenerateWorld(7, 3, worldStore);	// First generation of the world
@@ -36,6 +30,13 @@ void World::placePlayers(int playerCount)
 
 void World::print()
 {
+	// Print Legend
+	cout << "P - player" << endl;
+	cout << "G - gold" << endl;
+	cout << "HP - health potion" << endl;
+	cout << "SP - speed potion" << endl;
+	cout << "PP - power potion" << endl;
+
 	// Print the map
 	for (int i = 0; i < SIZE * 3 + 1; i++) {
 		cout << "-";
@@ -58,12 +59,7 @@ void World::print()
 
 void World::play()
 {
-	/*
-		Print World at Start of Every Turn
-	*/
-	print();
-
-	while (!playerTurns.empty())
+	while (playerTurns.size() > 1)
 	{
 		// Grab first player
 		Player* currPlayer = playerTurns.front();
@@ -93,18 +89,23 @@ void World::play()
 				cout << "(1) Attack" << endl;
 				cout << "(2) Move" << endl;
 				cout << "(3) Shop" << endl;
+				cout << "(4) View Stats" << endl;
+				cout << "(5) Skip" << endl;
 				cout << "----------" << endl;
 				cin >> choice;
 
 				// Ensure valid input
-				if (choice < 1 || choice > 3) cout << "Invalid option--try again" << endl;
-			} while (choice < 1 || choice > 3);
+				if (choice < 1 || choice > 5) cout << "Invalid option--try again" << endl;
+			} while (choice < 1 || choice > 5);
+
+			// Once out of loop clear buffer
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
 			if (choice == 1)
 			{
 				if (!attack_range(currPlayer))
 				{
-					i--;
+					i--;	// Doesn't attack, don't waste action
 				}
 			}
 			else if (choice == 2)
@@ -114,7 +115,19 @@ void World::play()
 			else if (choice == 3)
 			{
 				// Store Access
-				worldStore->accessStore(currPlayer);
+				if (!worldStore->accessStore(currPlayer))
+				{
+					i--;	// Doesn't purchase, don't waste action
+				}
+			}
+			else if (choice == 4)
+			{
+				currPlayer->view_stats();
+				i--;
+			}
+			else if (choice == 5)
+			{
+				break;	// End player turn early
 			}
 		}
 
@@ -123,9 +136,12 @@ void World::play()
 		playerTurns.push(currPlayer);
 
 		// Clear screen after every turn
-		//system("cls");
+		system("cls");
 
 	}
+
+	Player* winner = playerTurns.front();
+	cout << "Player " << winner->getName() << " has won!!!" << endl;
 }
 
 void World::regenerateWorld(int goldAmount, int potionsAmount, Store* s)
@@ -188,9 +204,9 @@ bool World::attack_range(Player* p)
 	int pY = p->getY();
 
 	// Iterate 1 block around player
-	for (int xPos = pX - 1; xPos < pX + 1; xPos++)
+	for (int xPos = pX - 1; xPos <= pX + 1; xPos++)
 	{
-		for (int yPos = pY - 1; yPos < pY + 1; yPos++)
+		for (int yPos = pY - 1; yPos <= pY + 1; yPos++)
 		{
 			// ignore ourselves
 			if (xPos == pX && yPos == pY) {} // do nothing

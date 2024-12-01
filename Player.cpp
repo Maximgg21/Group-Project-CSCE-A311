@@ -65,4 +65,15 @@ void Player::attack(Player* opponent)
 	opponent->HP -= ATK;
 }
 
+void Player::view_stats()
+{
+	cout << "----------" << endl;
+	cout << "HP  : " << HP	<< endl;
+	cout << "MS  : " << MS	<< endl;
+	cout << "ATK : " << ATK << endl;
+	cout << "----------" << endl;
+
+
+}
+
 
