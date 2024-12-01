@@ -67,11 +67,14 @@ void World::play()
 	while (!playerTurns.empty())
 	{
 		// Print world again
-		//print();
+		print();
 
 		// Grab first player
 		Player* currPlayer = playerTurns.front();
 		playerTurns.pop();
+
+		// Announce turn
+		cout << "It's " << currPlayer->getName() << "'s turn!" << endl;
 
 		int choiceCount = 2;
 		int choice;
@@ -97,7 +100,7 @@ void World::play()
 			}
 			else if (choice == 2)
 			{
-				continue;
+				move_range(currPlayer);
 			}
 			else if (choice == 3)
 			{
@@ -111,7 +114,7 @@ void World::play()
 		playerTurns.push(currPlayer);
 
 		// Clear screen after every turn
-		system("cls");
+		//system("cls");
 
 	}
 }
@@ -214,9 +217,9 @@ void World::attack_range(Player* p)
 		cin >> to_attack;
 
 		auto i = find_if(players.begin(), players.end(), [&](Player* e)
-		{
-			return e->getName() == to_attack;
-		});
+			{
+				return e->getName() == to_attack;
+			});
 
 		if (i == players.end())
 		{
@@ -235,4 +238,96 @@ void World::attack_range(Player* p)
 			p->attack(e);
 		}
 	}
+}
+
+void World::move_range(Player* p)
+{
+	int choice;
+
+	int xCombs[] = { 1,0,-1,0 };
+	int yCombs[] = { 0,-1,0,1 };
+
+
+	cout << "1-Right, 2-Up, 3-Left, 4-Down" << endl;
+	do
+	{
+		cin >> choice;
+
+		// Ensure values are correct
+		if (choice < 1 || choice > 4)
+		{
+			cout << "No such move--try again" << endl;
+		}
+		else
+		{
+			int xP = p->getX();
+			int yP = p->getY();
+
+			int newX = xP + xCombs[choice - 1];
+			int newY = yP + yCombs[choice - 1];
+
+			if (newX >= 0 && newX < SIZE && newY >= 0 && newY < SIZE && world[newX][newY].occupied == nullptr)
+			{
+				// Handle logical aspect
+				world[xP][yP].occupied = nullptr;
+				world[newX][newY].occupied = p;
+				p->move(newX, newY);
+
+				// Handle visual aspec
+				world[xP][yP].display = "  ";
+				world[newX][newY].display = "P" + p->getName();
+
+				if (world[newX][newY].gold != 0)
+				{
+					// Add gold to player
+					p->setGold(p->getGold() + world[newX][newY].gold);
+					// Remove gold from cell
+					world[newX][newY].gold = 0;
+				}
+
+				if (world[newX][newY].cellItem != nullptr)
+				{
+					item_collection(p);
+				}
+
+				// close out of loop
+				break;
+			}
+			else
+			{
+				cout << "Can't move there, choose again" << endl;
+			}
+		}
+
+
+	} while (true);
+}
+
+void World::item_collection(Player* p)
+{
+	int xP = p->getX();
+	int yP = p->getY();
+
+	int tp = world[xP][yP].cellItem->type;
+	int bf = world[xP][yP].cellItem->buff;
+
+	// Decide on which stat to buff
+	if (tp == 1)
+	{
+		p->setATK(p->getATK() + bf);
+	}
+	else if (tp == 2)
+	{
+		p->setHP(p->getHP() + bf);
+	}
+	else if (tp == 3)
+	{
+		p->setMS(p->getMS() + bf);
+	}
+
+	// Remove item from cell
+	world[xP][yP].cellItem = nullptr;
+
+	// Visual aspect
+	world[xP][yP].display = "  ";
 }

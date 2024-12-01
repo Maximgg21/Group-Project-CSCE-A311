@@ -37,5 +37,7 @@ private:
 	queue<Player*> playerTurns;		// Store players to determine turns
 
 	void attack_range(Player* p);				// Determines who the player can attack
+	void move_range(Player* p);					// Handles the event of a player moving
+	void item_collection(Player* p);
 };
 
