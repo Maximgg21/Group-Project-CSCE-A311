@@ -1,12 +1,9 @@
 #pragma once
 #include <vector>
 #include <string>
-#include <unordered_map>
-#include <map>
 #include <queue>
 #include "Player.h"
 #include "Store.h"
-#include "stdlib.h"
 
 using namespace std;
 
@@ -24,21 +21,20 @@ class World
 {
 public:
 	World();
-	Store* worldStore; // Added for regenerateWorld function to work with placing potions.
-	void placePlayers(int playerCount); // Places given amount of players in the world
-	void print(); // Prints the world for the user (This should be a private function later used inside play() )
+	~World();
 	void play();	// Plays the game
 private:
-	int turn;
+	Store* worldStore; // Added for regenerateWorld function to work with placing potions.
+	vector<vector<Cell>> world;		// The map
+	queue<Player*> playerTurns;		// Store players to determine turns
+	bool playWithBots;
+	void print(); // Prints the world for the user
+	void placePlayers(); // Places given amount of players in the world
 	void regenerateWorld(int goldAmount, int potionsAmount, Store* s);	// Generates items in the world
 	pair<int, int> randomEmptyTile();	// Gets coordinates x, y of an empty position in the world
-	vector<vector<Cell>> world;		// The map
-
-	queue<Player*> playerTurns;		// Store players to determine turns
-
 	void computer_turn(Player* p); // Automates turn for non played players
 	bool attack_range(Player* p);				// Determines who the player can attack
-	void move_range(Player* p);					// Handles the event of a player moving
+	bool move_range(Player* p);					// Handles the event of a player moving
 	void item_collection(Player* p);
 };
 
