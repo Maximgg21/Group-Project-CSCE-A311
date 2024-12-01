@@ -126,13 +126,12 @@ void World::play()
 				}
 				else if (choice == 5)
 				{
-					break;
+					std::cout << "Turn Skipped." << std::endl;
 				}	
 			}
-
-			// Add player to back
-			playerTurns.push(currPlayer);
 		}
+		// Add player to back
+		playerTurns.push(currPlayer);
 		// Clear screen after every turn
 		system("cls");
 
@@ -406,8 +405,8 @@ void World::move_range(Player* p)
 {
 	int choice;
 
-	int xCombs[] = { 1,0,-1,0 };
-	int yCombs[] = { 0,-1,0,1 };
+	int yCombs[] = { 1,0,-1,0 };
+	int xCombs[] = { 0,-1,0,1 };
 
 
 	cout << "1-Right, 2-Up, 3-Left, 4-Down" << endl;

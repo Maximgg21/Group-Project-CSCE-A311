@@ -5,7 +5,7 @@ Player::Player() : name("0"), x(0), y(0), HP(20), ATK(3), MS(1), gold(7), cpu(tr
 {
 }
 
-Player::Player(string name, int x, int y) : name(name), x(x), y(y) , HP(20), ATK(3), MS(2), gold(0), cpu(false) {
+Player::Player(string name, int x, int y) : name(name), x(x), y(y) , HP(20), ATK(3), MS(1), gold(0), cpu(true) {
 
 };
 
