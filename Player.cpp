@@ -1,7 +1,7 @@
 #include "Player.h"
 #include <iostream>
 
-Player::Player() : name("0"), x(0), y(0), HP(20), ATK(3), MS(1), gold(7)
+Player::Player() : name("0"), x(0), y(0), HP(20), ATK(3), MS(1), gold(7), cpu(true)
 {
 }
 
@@ -52,6 +52,16 @@ int Player::getHP()
 void Player::setHP(int h)
 {
 	HP = h;
+}
+
+bool Player::getCpu()
+{
+	return cpu;
+}
+
+void Player::setCpu(bool b)
+{
+	cpu = b;
 }
 
 void Player::move(int new_x, int new_y)

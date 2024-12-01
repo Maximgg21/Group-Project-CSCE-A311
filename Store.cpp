@@ -35,7 +35,7 @@ Store::Store()
 	}
 }
 
-void Store::accessStore(Player* user) // Opens the store and lists the items that a player can buy to upgrade their stats
+void Store::accessStore(Player* user, string item) // Opens the store and lists the items that a player can buy to upgrade their stats
 {
 	std::cout << "You have " << user->getGold() << " Gold" << std::endl;
 	std::cout << "What would you like to buy?" << std::endl << "(Type the item name or 'exit' to leave)" << std::endl << std::endl;
@@ -47,12 +47,14 @@ void Store::accessStore(Player* user) // Opens the store and lists the items tha
 	}
 
 	while (temp != nullptr) {		// List the items in the store
-		std::cout << temp->name << " - " << temp->description << " - Price: " << temp->price << std::endl << std::endl;
+		std::cout << temp->name << " - " <<
+		temp->description << " - $" << temp->price << std::endl << std::endl;
 		temp = temp->next;
 	}
 
 	std::string order;
-	getline(cin, order);		// Get the user's desired item.
+	cin.ignore();
+	if (item == "") getline(cin, order);		// Get the user's desired item.
 	if (order == "exit") {
 		cout << "You left the store." << endl;
 		return;

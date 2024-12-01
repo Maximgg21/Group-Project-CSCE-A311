@@ -15,9 +15,9 @@ int main() {
 	demoWorld.play();
 
 
-	/* Test
+	
 
-	demoWorld.print();
+	/*demoWorld.print();
 	Store playerStore;
 
 	Player player;
