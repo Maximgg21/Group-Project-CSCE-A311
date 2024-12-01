@@ -11,13 +11,13 @@ int main() {
 	cout << "How many players would you like? (Max 9)" << endl;
 	cin >> playerCount;*/
 
-	demoWorld.placePlayers(1);
+	demoWorld.placePlayers(3);
 	demoWorld.play();
 
 
-	/* Test
+	
 
-	demoWorld.print();
+	/*demoWorld.print();
 	Store playerStore;
 
 	Player player;

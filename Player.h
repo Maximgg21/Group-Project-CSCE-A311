@@ -19,6 +19,8 @@ public:
 	void setATK(int a);
 	int getHP();
 	void setHP(int h);
+	bool getCpu();
+	void setCpu(bool b);
 	void move(int new_x, int new_y);
 	void attack(Player* opponent);
 	int getX() { return x; }
@@ -27,5 +29,6 @@ public:
 private:
 	int x, y, HP, ATK, MS, gold;
 	string name;
+	bool cpu;
 };
 
