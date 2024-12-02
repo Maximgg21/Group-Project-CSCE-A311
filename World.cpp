@@ -7,10 +7,10 @@ World::World() : world(SIZE, vector<Cell>(SIZE, Cell()))
 {
 	worldStore = new Store;
 
-	placePlayers();
-
 	cout << "Would you like to play with bots? (1) Yes / (0) No" << endl;
 	cin >> playWithBots;
+
+	placePlayers();
 
 	regenerateWorld(7, 3, worldStore);	// First generation of the world
 

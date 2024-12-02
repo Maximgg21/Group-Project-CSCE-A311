@@ -12,7 +12,6 @@ int main() {
 	DWORD mode;
 	GetConsoleMode(hConsole, &mode);
 	SetConsoleMode(hConsole, mode | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
-	std::cout << "\033[1;31m" << "This is red text on Windows!" << "\033[0m" << std::endl;
 
 	srand(time(NULL));
 

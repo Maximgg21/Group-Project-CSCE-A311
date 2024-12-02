@@ -28,8 +28,8 @@ private:
 	vector<vector<Cell>> world;		// The map
 	queue<Player*> playerTurns;		// Store players to determine turns
 	bool playWithBots;
-	void print(); // Prints the world for the user
 	void placePlayers(); // Places given amount of players in the world
+	void print(); // Prints the world for the user
 	void regenerateWorld(int goldAmount, int potionsAmount, Store* s);	// Generates items in the world
 	pair<int, int> randomEmptyTile();	// Gets coordinates x, y of an empty position in the world
 	void computer_turn(Player* p); // Automates turn for non played players
