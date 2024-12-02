@@ -272,7 +272,7 @@ void World::computer_turn(Player* p)
 
 					// Handle visual aspec
 					world[pX][pY].display = "  ";
-					world[newX][newY].display = "P" + p->getName();
+					world[newX][newY].display = "\x1b[31mP" + p->getName() + "\x1b[0m";
 
 					if (world[newX][newY].gold != 0)
 					{
@@ -333,7 +333,7 @@ void World::computer_turn(Player* p)
 
 					// Handle visual aspec
 					world[pX][pY].display = "  ";
-					world[newX][newY].display = "P" + p->getName();
+					world[newX][newY].display = "\x1b[31mP" + p->getName() + "\x1b[0m";
 
 					if (world[newX][newY].gold != 0)
 					{
@@ -481,7 +481,7 @@ bool World::move_range(Player* p)
 
 				// Handle visual aspec
 				world[xP][yP].display = "  ";
-				world[newX][newY].display = ("P" + p->getName());
+				world[newX][newY].display = ("\x1b[31mP" + p->getName() + "\x1b[0m");
 
 				if (world[newX][newY].gold != 0)
 				{
