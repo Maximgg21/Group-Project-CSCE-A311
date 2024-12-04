@@ -161,15 +161,12 @@ void World::play()
 				else if (choice == 5)
 				{
 					std::cout << "Turn Skipped." << std::endl;
+					i = choiceCount;
 				}	
 			}
 		}
 		// Add player to back
 		playerTurns.push(currPlayer);
-    
-		// Clear screen after every turn
-		cout << string(10, '\n');
-
 	}
 
 	Player* winner = playerTurns.front();
@@ -312,7 +309,11 @@ void World::computer_turn(Player* p)
 					}
 				}
 			}
-			if (!players.empty()) p->attack(players[0]);
+			if (!players.empty()) {
+				p->attack(players[0]);
+				cout << "Player " << p->getName() << " attacked player " << players[0]->getName() << endl;
+				cout << "They have " << players[0]->getHP() << " left" << endl;
+			}
 			else {
 				vector<pair<int, int>> validMoves;
 				if (pX + 1 < SIZE) validMoves.push_back({ pX + 1, pY });
@@ -424,12 +425,14 @@ bool World::attack_range(Player* p)
 		{
 			// Attack player
 			p->attack(e);
+			cout << "You attacked player " << e->getName() << endl;
+			cout << "They have " << e->getHP() << "HP left" << endl;
 
 			// If player dies from attack, remove from play
 			if (e->getHP() <= 0)
 			{
 				cout << "You killed Player " << e->getName() << endl;
-
+				
 				int xE = e->getX();
 				int yE = e->getY();
 

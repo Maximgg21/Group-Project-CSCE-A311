@@ -7,12 +7,12 @@ Store::Store()
 		{"Small Power Potion", "A potion that increases your ATK by 1.", 1, 5, 1, nullptr, nullptr},
 		{"Medium Power Potion", "A potion that increases your ATK by 2.", 1, 7, 2, nullptr, nullptr},
 		{"Large Power Potion", "A potion that increases your ATK by 3.", 1, 10, 3, nullptr, nullptr},
-		{"Small Speed Potion", "A potion that increases your MS by 1.", 3, 5, 1, nullptr, nullptr},
-		{"Medium Speed Potion", "A potion that increases your MS by 2.", 3, 7, 2, nullptr, nullptr},
-		{"Large Speed Potion", "A potion that increases your MS by 3.", 3, 10, 3, nullptr, nullptr},
-		{"Small Health Potion", "A potion that increases your HP by 3.", 2, 5, 3, nullptr, nullptr},
-		{"Medium Health Potion", "A potion that increases your HP by 6.", 2, 7, 6, nullptr, nullptr},
-		{"Large Health Potion", "A potion that increases your HP by 10.", 2, 10, 10, nullptr, nullptr}
+		{"Small Speed Potion", "A potion that increases your MS by 1.", 3, 10, 1, nullptr, nullptr},
+		{"Medium Speed Potion", "A potion that increases your MS by 2.", 3, 15, 2, nullptr, nullptr},
+		{"Large Speed Potion", "A potion that increases your MS by 3.", 3, 20, 3, nullptr, nullptr},
+		{"Small Health Potion", "A potion that increases your HP by 3.", 2, 3, 3, nullptr, nullptr},
+		{"Medium Health Potion", "A potion that increases your HP by 6.", 2, 5, 6, nullptr, nullptr},
+		{"Large Health Potion", "A potion that increases your HP by 10.", 2, 8, 10, nullptr, nullptr}
 	};
 
 	shared_ptr<Item> current = nullptr;
@@ -48,7 +48,7 @@ bool Store::accessStore(Player* user, string item) // Opens the store and lists 
 
 	while (temp != nullptr) {		// List the items in the store
 		std::cout << temp->name << " - " <<
-			temp->description << " - $" << temp->price << std::endl << std::endl;
+			temp->description << " - " << temp->price << " gold" << std::endl << std::endl;
 		temp = temp->next;
 	}
 
