@@ -204,7 +204,7 @@ void World::regenerateWorld(int goldAmount, int potionsAmount, Store* s)
 		int x = result.first;
 		int y = result.second;
 
-		int randomGold = rand() % 9 + 1;
+		int randomGold = rand() % 7 + 3;
 
 		world[x][y].gold = randomGold;
 		world[x][y].display = "\x1b[33mG" + to_string(randomGold) + "\x1b[0m";
@@ -312,7 +312,7 @@ void World::computer_turn(Player* p)
 			if (!players.empty()) {
 				p->attack(players[0]);
 				cout << "Player " << p->getName() << " attacked player " << players[0]->getName() << endl;
-				cout << "They have " << players[0]->getHP() << " left" << endl;
+				cout << "They have " << players[0]->getHP() << "HP left" << endl;
 			}
 			else {
 				vector<pair<int, int>> validMoves;
